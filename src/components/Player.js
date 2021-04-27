@@ -5,7 +5,6 @@ import {faPlay,
     faAngleLeft,
     faPause,
 } from "@fortawesome/free-solid-svg-icons";
-import {playAudio} from "../util";
 
 const  PLayer = ({currentSong,
                      isPlaying,
@@ -58,21 +57,21 @@ const  PLayer = ({currentSong,
         audioRef.current.currentTime = e.target.value ;
         setSongInfo({...songInfo, currentTime : e.target.value });
     };
-    const skipTrackHandler = (direction) =>{
+    const skipTrackHandler = async (direction) =>{
         let currentIndex = songs.findIndex((song)=> song.id === currentSong.id);
         if(direction === "skip-forward"){
-            setCurrentSong(songs[(currentIndex + 1) % songs.length] );//back to 0 when arrive to the number of songs length
+          await  setCurrentSong(songs[(currentIndex + 1) % songs.length] );//back to 0 when arrive to the number of songs length
         }
         if(direction === "skip-back"){
             if((currentIndex -1) % songs.length === -1 ){
-                setCurrentSong(songs[songs.length -1]);//the length is 5 but last index is 4
-                playAudio(isPlaying,audioRef);
+               await setCurrentSong(songs[songs.length -1]);//the length is 5 but last index is 4
+                if(isPlaying) audioRef.current.play();
                 return;
             }
-            setCurrentSong(songs[(currentIndex - 1) % songs.length] );
+             await setCurrentSong(songs[(currentIndex - 1) % songs.length] );
         }
-        playAudio(isPlaying,audioRef);
-    };
+        if(isPlaying) audioRef.current.play();
+              };
  // Add styles
     const trackAnim = {
         transform :`translateX(${songInfo.animationPercentage}%)`// % is for transform is a css property
