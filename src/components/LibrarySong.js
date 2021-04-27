@@ -19,6 +19,7 @@ const  LibrarySong = ({song ,songs, setCurrentSong,audioRef,isPlaying ,id ,setSo
                 };
             }
         });
+        console.log("select song");
         setSongs(newSongs);
         //check if tha song is loaded
         if(isPlaying) audioRef.current.play();
